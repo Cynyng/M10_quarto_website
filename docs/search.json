@@ -67,7 +67,7 @@
     "href": "index.html",
     "title": "Home",
     "section": "",
-    "text": "Welcome to my MSDM website. This website showcases my work in dashboards, Shiny applications, and web-based communication using Quarto.\n\n\nHello, my name is Lucynda Young. I am a graduate student in the MSDM program with an interest in analytics, communication, and turning complex data into clear audience-centered stories.\n\n\n\nAdd your professional photo to the images folder and keep the file name as lucynda-photo.jpg.\n\n\n\n\nMy career goal is to build a path in data analytics, digital strategy, and business intelligence, where I can combine technical analysis with strong communication. I am especially interested in roles that involve dashboards, performance reporting, and translating data into practical recommendations for organizations and communities.\n\n\n\n\n\n\nR\nQuarto\nShiny\nDashboard design\nData visualization\nSQL\nSpreadsheet analysis\nAudience-focused reporting\n\n\n\n\n\nCommunication\nProblem-solving\nProject organization\nAnalytical storytelling\nPresentation design\n\n\n\n\n\n\nMaster of Science in Data Science and Management (MSDM), add university name here\nAdd prior degree or additional education here if you would like\n\n\n\n\nThis website contains four main sections:\n\nHome — introduces my background, interests, and goals\n\nDashboard — presents a static dashboard based on Ontario International Airport community engagement data\n\nEssay on Shiny Apps — explains how Shiny can be used to build interactive analytical tools\n\nEssay on Shinylive — explains what Shinylive is and how it differs from traditional Shiny apps\n\n\n\n\nThis website was created to demonstrate not only technical work, but also the ability to organize information for an audience. A strong website should help visitors move from introduction, to analysis, to explanation in a way that feels clear, purposeful, and professional."
+    "text": "Welcome to my MSDM website. This website showcases my work in dashboards, Shiny applications, and web-based communication using Quarto.\n\n\nHello, my name is Lucynda Young. I am a graduate student in the MSDM program with an interest in analytics, communication, and turning complex data into clear audience-centered stories.\n\n\n\nMy career goal is to build a path in data analytics, digital strategy, and business intelligence, where I can combine technical analysis with strong communication. I am especially interested in roles that involve dashboards, performance reporting, and translating data into practical recommendations for organizations and communities.\n\n\n\n\n\n\nR\nQuarto\nShiny\nDashboard design\nData visualization\nSQL\nSpreadsheet analysis\nAudience-focused reporting\n\n\n\n\n\nCommunication\nProblem-solving\nProject organization\nAnalytical storytelling\nPresentation design\n\n\n\n\n\n\nMaster of Science in Data Science and Management (MSDM), add university name here\nAdd prior degree or additional education here if you would like\n\n\n\n\nThis website contains four main sections:\n\nHome — introduces my background, interests, and goals\n\nDashboard — presents a static dashboard based on Ontario International Airport community engagement data\n\nEssay on Shiny Apps — explains how Shiny can be used to build interactive analytical tools\n\nEssay on Shinylive — explains what Shinylive is and how it differs from traditional Shiny apps\n\n\n\n\nThis website was created to demonstrate not only technical work, but also the ability to organize information for an audience. A strong website should help visitors move from introduction, to analysis, to explanation in a way that feels clear, purposeful, and professional."
   },
   {
     "objectID": "index.html#about-me",
@@ -75,13 +75,6 @@
     "title": "Home",
     "section": "",
     "text": "Hello, my name is Lucynda Young. I am a graduate student in the MSDM program with an interest in analytics, communication, and turning complex data into clear audience-centered stories."
-  },
-  {
-    "objectID": "index.html#photo",
-    "href": "index.html#photo",
-    "title": "Home",
-    "section": "",
-    "text": "Add your professional photo to the images folder and keep the file name as lucynda-photo.jpg."
   },
   {
     "objectID": "index.html#career-aspirations",
