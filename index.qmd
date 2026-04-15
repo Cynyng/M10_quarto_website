@@ -11,11 +11,6 @@ Welcome to my MSDM website. This website showcases my work in dashboards, Shiny 
 
 Hello, my name is **Lucynda Young**. I am a graduate student in the **MSDM program** with an interest in analytics, communication, and turning complex data into clear audience-centered stories.
 
-## Photo
-
-Add your professional photo to the `images` folder and keep the file name as `lucynda-photo.jpg`.
-
-![](images/lucynda-photo.jpg){width=250 fig-alt="Professional photo of Lucynda Young"}
 
 ## Career Aspirations
 
