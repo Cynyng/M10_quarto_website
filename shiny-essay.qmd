@@ -1,0 +1,152 @@
+---
+title: "Essay on Shiny Apps"
+format: html
+---
+
+# Essay on Shiny Apps
+
+## Prompt
+
+Alternatively, you can create a separate simple webpage to teach your coworkers how to create a Shiny App. Let's assume that your coworkers are interested in learning about it, and assume that you are helping them. Create lecture notes that you can use to teach the person. This will become part of the website under "Essay on Shiny Apps."
+
+## Response
+
+Shiny is an R package for building interactive web applications directly from R. It is especially useful when an analyst wants users to explore data instead of only reading a fixed report. A Shiny app can include filters, menus, sliders, reactive tables, and dynamic charts, which allows the audience to focus on the questions that matter most to them.
+
+In my earlier dashboard work, I used a Shiny-style interactive approach for Ontario International Airport's digital performance story. The main analytical question was: **Which platforms, dates, and post formats drive the strongest social engagement for Ontario International Airport, and how does performance change when the user filters by network and time?** That question is a strong fit for Shiny because the audience may want to compare networks, shift time windows, and evaluate different definitions of performance such as impressions, engagements, or engagement rate.
+
+## Why Shiny Is Useful for Coworkers
+
+A Shiny app is helpful for coworkers because it turns a static analysis into a tool they can explore on their own. Instead of asking an analyst to generate a new chart every time they have a different question, a user can change filters and immediately see updated outputs. This makes Shiny useful for campaign reviews, stakeholder meetings, internal dashboards, classroom demonstrations, and portfolio projects.
+
+## Example from This Project
+
+For the interactive dashboard, the data came from two ONT Airport performance files:
+
+- `Post Performance (Ontario International Airport) January 1, 2025 - December 31, 2025.csv`
+- `Profile Performance (Ontario International Airport) January 1, 2025 - December 31, 2025.xlsx`
+
+The post-level data included fields such as:
+
+- `Date`
+- `Network`
+- `Post Type`
+- `Content Type`
+- `Impressions`
+- `Reach`
+- `Engagements`
+- `Engagement Rate (per Impression)`
+- `Video Views`
+
+The profile-level data included fields such as:
+
+- `Date`
+- `Network`
+- `Audience`
+- `Net Audience Growth`
+- `Published Posts (Total)`
+- `Impressions`
+- `Video Views`
+- `Engagements`
+- `Engagement Rate (per Impression)`
+
+These two files work well together because one shows post-level performance while the other provides a broader account-level view over time.
+
+## Core Structure of a Shiny App
+
+A basic Shiny app has two main parts:
+
+### 1. User Interface (`ui`)
+
+The user interface controls what the audience sees. This includes the title, sidebar, input controls, plots, and tables.
+
+### 2. Server (`server`)
+
+The server controls what the app does. It contains the logic that reacts to user input and updates the outputs.
+
+## Simple Example
+
+```{r}
+#| eval: false
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Simple Histogram App"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("bins", "Number of bins:", min = 5, max = 50, value = 20)
+    ),
+    mainPanel(
+      plotOutput("histPlot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$histPlot <- renderPlot({
+    hist(mtcars$mpg, breaks = input$bins,
+         main = "Distribution of MPG",
+         xlab = "Miles per Gallon")
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+## How I Would Teach a Coworker to Build One
+
+I would teach a coworker to create a Shiny app in five steps:
+
+### Step 1: Install and load the package
+
+```{r}
+#| eval: false
+install.packages("shiny")
+library(shiny)
+```
+
+### Step 2: Build a simple layout
+
+Start with a title, one sidebar input, and one main output.
+
+### Step 3: Connect the input to a reactive output
+
+Use `renderPlot()`, `renderTable()`, or another render function in the server.
+
+### Step 4: Run the app
+
+Use `shinyApp(ui, server)` or run the file in RStudio.
+
+### Step 5: Improve the app for users
+
+Add filters, labels, formatting, and explanations so the app is understandable for a non-technical audience.
+
+## Why Shiny Was the Right Tool for This Case
+
+The ONT Airport interactive app was designed to help users answer questions such as:
+
+- How did performance change over time?
+- Which network produced the strongest results?
+- Which metric should define “best” performance?
+- How do filters change the trend story?
+
+Because these questions depend on user choices, an interactive format makes more sense than a single fixed chart. Shiny therefore becomes more than a display tool; it becomes an exploratory analysis tool.
+
+## Benefits of Shiny
+
+- Makes data interactive
+- Helps non-technical users explore results
+- Supports multiple filters and views
+- Improves communication in meetings and reviews
+- Works well for internal dashboards and teaching examples
+
+## Limitations of Shiny
+
+- Traditional deployment often requires a server or hosting platform
+- Large or complex apps can be harder to maintain
+- Performance may drop with large datasets or complicated logic
+- Good interface design still matters; interactivity alone does not guarantee clarity
+
+## Conclusion
+
+Shiny is a practical way to turn analysis into an interactive experience. For coworkers, the main idea is simple: a Shiny app connects visible controls to reactive R code. Once that concept is understood, Shiny becomes a powerful tool for sharing analysis in a way that is more flexible and engaging than a static report.

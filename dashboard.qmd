@@ -1,0 +1,323 @@
+---
+title: "Ontario International Airport Community Engagement Dashboard"
+format:
+  dashboard:
+    orientation: rows
+    theme: cosmo
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+
+## Purpose
+
+This dashboard summarizes Ontario International Airport's 2025 community engagement footprint using the CE event tracker and web traffic geography data. It is designed for a portfolio and executive audience, with a focus on where outreach was concentrated, which event formats generated the most touchpoints, and how offline community activity aligns with the airport's broader digital audience.
+
+```{r}
+#| label: setup
+#| include: false
+
+library(dplyr)
+library(readr)
+library(readxl)
+library(lubridate)
+library(janitor)
+library(ggplot2)
+library(plotly)
+library(stringr)
+library(bslib)
+library(scales)
+```
+
+```{r}
+# CE EVENT TRACKER ---------------------------------------------------------
+
+ce_raw <- readxl::read_excel(
+  "CE_Event Tracker data.xlsm",
+  sheet = "CE_Event Tracker"
+) |>
+  dplyr::mutate(
+    Date = as.character(Date),
+    Date = dplyr::coalesce(
+      suppressWarnings(as.Date(Date, format = "%m/%d/%Y")),
+      suppressWarnings(as.Date(Date, format = "%Y-%m-%d"))
+    ),
+    Interactions = readr::parse_number(as.character(interactions)),
+    Attendance = readr::parse_number(as.character(Attendance)),
+    City = as.character(City),
+    `Type of Event` = as.character(`Type of Event`)
+  ) |>
+  dplyr::filter(!is.na(Date))
+
+ce_2025 <- ce_raw |>
+  dplyr::filter(format(Date, "%Y") == "2025")
+
+# TRAFFIC ------------------------------------------------------------------
+
+traffic <- readr::read_csv(
+  "traffic(combined).csv",
+  show_col_types = FALSE
+)
+
+# Identify likely columns
+traffic_names <- names(traffic)
+
+users_col <- traffic_names[grepl("users", traffic_names, ignore.case = TRUE)][1]
+city_col  <- traffic_names[grepl("city", traffic_names, ignore.case = TRUE)][1]
+pct_col   <- traffic_names[grepl("percent|delta|change|%", traffic_names, ignore.case = TRUE)][1]
+
+traffic <- traffic |>
+  dplyr::rename(
+    City = !!city_col,
+    Total_Users_Raw = !!users_col
+  ) |>
+  dplyr::mutate(
+    Total_Users = suppressWarnings(as.numeric(Total_Users_Raw)),
+    Pct_Change = if (!is.na(pct_col)) {
+      readr::parse_number(as.character(.data[[pct_col]])) / 100
+    } else {
+      NA_real_
+    }
+  )
+
+# KPI SUMMARY --------------------------------------------------------------
+
+kpi <- ce_2025 |>
+  dplyr::summarise(
+    Total_Events = dplyr::n(),
+    Total_Interactions = sum(interactions, na.rm = TRUE),
+    Total_Attendance = sum(Attendance, na.rm = TRUE),
+    Avg_Interactions = mean(interactions, na.rm = TRUE),
+    Unique_Cities = dplyr::n_distinct(City[!is.na(City) & City != ""])
+  )
+
+# EVENTS BY MONTH ----------------------------------------------------------
+
+events_by_month <- ce_2025 |>
+  dplyr::mutate(
+    Month = as.Date(format(Date, "%Y-%m-01"))
+  ) |>
+  dplyr::group_by(Month) |>
+  dplyr::summarise(
+    Interactions = sum(Interactions, na.rm = TRUE),
+    Attendance = sum(Attendance, na.rm = TRUE),
+    Events = dplyr::n(),
+    .groups = "drop"
+  ) |>
+  dplyr::arrange(Month)
+
+# EVENT TYPE SUMMARY -------------------------------------------------------
+
+event_type_summary <- ce_2025 |>
+  dplyr::group_by(`Type of Event`) |>
+  dplyr::summarise(
+    Interactions = sum(Interactions, na.rm = TRUE),
+    Attendance = sum(Attendance, na.rm = TRUE),
+    Events = dplyr::n(),
+    .groups = "drop"
+  ) |>
+  dplyr::arrange(dplyr::desc(Interactions)) |>
+  dplyr::slice_head(n = 10)
+
+# CITY SUMMARY -------------------------------------------------------------
+
+city_summary <- ce_2025 |>
+  dplyr::mutate(
+    City = dplyr::if_else(is.na(City) | City == "", "Unknown", City)
+  ) |>
+  dplyr::group_by(City) |>
+  dplyr::summarise(
+    interactions = sum(interactions, na.rm = TRUE),
+    Attendance = sum(Attendance, na.rm = TRUE),
+    Events = dplyr::n(),
+    .groups = "drop"
+  ) |>
+  dplyr::arrange(dplyr::desc(interactions)) |>
+  dplyr::slice_head(n = 12)
+
+# TOP TRAFFIC --------------------------------------------------------------
+
+top_traffic <- traffic |>
+  dplyr::filter(!is.na(City), City != "(not set)") |>
+  dplyr::arrange(dplyr::desc(Total_Users)) |>
+  dplyr::slice_head(n = 12)
+```
+
+# Overview
+
+This dashboard summarizes **Ontario International Airport's 2025 community engagement footprint** using the CE event tracker and web traffic geography data. The goal is to show where outreach was concentrated, which event formats generated the most touchpoints, and how offline activity aligns with the airport's broader digital audience.
+
+## Value Boxes
+**Interpretation:**  
+ONT Airport hosted a meaningful number of community events across 2025, generating strong interaction volume and attendance across multiple cities. The spread of unique cities highlights the airport’s regional reach, while total interactions and attendance indicate both engagement depth and physical turnout.
+### Total Events
+
+```{r}
+bslib::value_box(
+  title = "Total Events",
+  value = kpi$Total_Events
+)
+```
+
+### Total Interactions
+
+```{r}
+bslib::value_box(
+  title = "Total Interactions",
+  value = scales::comma(kpi$Total_Interactions),
+  showcase = NULL
+)
+```
+
+### Total Attendance
+
+```{r}
+bslib::value_box(
+  title = "Total Attendance",
+  value = scales::comma(kpi$Total_Attendance),
+  showcase = NULL
+)
+```
+
+### Unique Cities
+
+```{r}
+bslib::value_box(
+  title = "Unique Cities",
+  value = scales::comma(kpi$Unique_Cities),
+  showcase = NULL
+)
+```
+
+# Engagement Trends
+
+## Community interactions by month
+
+```{r}
+ggplot2::ggplot(events_by_month, ggplot2::aes(x = Month, y = Interactions)) +
+  ggplot2::geom_line(linewidth = 1) +
+  ggplot2::geom_point(size = 2) +
+  ggplot2::scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
+  ggplot2::labs(
+    title = "Monthly Community Interactions",
+    x = "Month",
+    y = "Interactions"
+  ) +
+  ggplot2::theme_minimal()
+```
+
+**Interpretation:**  
+Community interactions fluctuate throughout the year, with clear peaks indicating periods of stronger engagement activity. These spikes likely correspond to larger events, seasonal programming, or coordinated outreach efforts. The variability suggests that engagement is not evenly distributed, highlighting opportunities to stabilize or replicate high-performing periods.
+
+## Attendance by month
+
+```{r}
+ggplot(events_by_month, aes(Month, Attendance)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_y_continuous(labels = comma) +
+  scale_x_date(date_labels = "%b") +
+  labs(
+    x = NULL,
+    y = "Attendance",
+    title = "Attendance highlights where reach exceeded direct interactions"
+  )
+```
+
+**Interpretation:**  
+Attendance trends do not always perfectly align with interaction levels, suggesting that some events prioritized reach (large attendance) while others generated deeper engagement (higher interactions). This distinction highlights different event objectives, such as awareness versus active participation.
+
+# What Drove Engagement?
+
+## Top event types by interactions
+
+```{r}
+ggplot2::ggplot(
+  event_type_summary,
+  ggplot2::aes(
+    x = reorder(`Type of Event`, Interactions),
+    y = Interactions
+  )
+) +
+  ggplot2::geom_col() +
+  ggplot2::coord_flip() +
+  ggplot2::labs(
+    title = "Top Event Types by Interactions",
+    x = "Type of Event",
+    y = "Interactions"
+  ) +
+  ggplot2::theme_minimal()
+
+```
+
+**Interpretation:**  
+A small number of event types account for the majority of interactions, indicating that certain formats are significantly more effective at engaging the community. These high-performing event categories should be prioritized or replicated in future outreach strategies to maximize engagement impact.
+
+## Top cities by interactions
+
+```{r}
+ggplot(city_summary, aes(x = reorder(City, interactions), y = interactions)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  labs(
+    x = NULL,
+    y = "Interactions",
+    title = "Ontario leads, with strong additional concentration in Claremont and Pomona"
+  )
+```
+
+**Interpretation:**  
+Community engagement is geographically concentrated, with a few key cities driving the majority of interactions. While Ontario leads as expected, nearby cities such as Claremont and Pomona also show strong engagement levels, suggesting regional clusters of audience interest and opportunity for targeted outreach.
+
+# Attendance vs. Interaction Quality
+
+## Attendance and interactions by city
+
+```{r}
+plot_ly(
+  city_summary,
+  x = ~Attendance,
+  y = ~interactions,
+  type = "scatter",
+  mode = "markers+text",
+  text = ~City,
+  textposition = "top center",
+  hovertemplate = paste(
+    "<b>%{text}</b><br>",
+    "Attendance: %{x:,}<br>",
+    "Interactions: %{y:,}<extra></extra>"
+  )
+) |>
+  layout(
+    title = "Some cities delivered scale, while others delivered denser engagement",
+    xaxis = list(title = "Attendance"),
+    yaxis = list(title = "Interactions")
+  )
+```
+
+**Interpretation:**  
+This comparison shows that higher attendance does not always translate into higher interaction levels. Some cities generate strong turnout but lower engagement per attendee, while others demonstrate more concentrated interaction despite smaller audiences. This highlights the importance of balancing scale with engagement quality when planning future events.
+
+# Digital Geography Context
+
+## Top community engagement cities
+
+```{r}
+knitr::kable(city_summary, caption = "Top cities from the community engagement tracker")
+```
+
+**Interpretation:**  
+The event tracker data confirms that ONT’s community engagement efforts are strongest in a concentrated set of cities. These locations represent core markets where outreach efforts are consistently generating measurable interaction and attendance.
+
+## Top traffic cities
+
+```{r}
+knitr::kable(top_traffic, caption = "Top cities from the web traffic geography file")
+```
+
+**Interpretation:**  
+Comparing traffic data with community engagement locations provides insight into how offline outreach aligns with digital audience behavior. Overlap between high-traffic and high-engagement cities suggests strong brand presence, while gaps may indicate opportunities to expand outreach or improve digital targeting.

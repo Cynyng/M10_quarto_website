@@ -1,0 +1,61 @@
+---
+title: "Home"
+format: html
+---
+
+# Welcome
+
+Welcome to my MSDM website. This website showcases my work in dashboards, Shiny applications, and web-based communication using Quarto.
+
+## About Me
+
+Hello, my name is **Lucynda Young**. I am a graduate student in the **MSDM program** with an interest in analytics, communication, and turning complex data into clear audience-centered stories.
+
+## Photo
+
+Add your professional photo to the `images` folder and keep the file name as `lucynda-photo.jpg`.
+
+![](images/lucynda-photo.jpg){width=250 fig-alt="Professional photo of Lucynda Young"}
+
+## Career Aspirations
+
+My career goal is to build a path in data analytics, digital strategy, and business intelligence, where I can combine technical analysis with strong communication. I am especially interested in roles that involve dashboards, performance reporting, and translating data into practical recommendations for organizations and communities.
+
+## Skills
+
+### Technical Skills
+
+- R
+- Quarto
+- Shiny
+- Dashboard design
+- Data visualization
+- SQL
+- Spreadsheet analysis
+- Audience-focused reporting
+
+### Professional Skills
+
+- Communication
+- Problem-solving
+- Project organization
+- Analytical storytelling
+- Presentation design
+
+## Education
+
+- **Master of Science in Data Science and Management (MSDM)**, *add university name here*
+- Add prior degree or additional education here if you would like
+
+## About This Website
+
+This website contains four main sections:
+
+1. **Home** — introduces my background, interests, and goals  
+2. **Dashboard** — presents a static dashboard based on Ontario International Airport community engagement data  
+3. **Essay on Shiny Apps** — explains how Shiny can be used to build interactive analytical tools  
+4. **Essay on Shinylive** — explains what Shinylive is and how it differs from traditional Shiny apps  
+
+## Reflection
+
+This website was created to demonstrate not only technical work, but also the ability to organize information for an audience. A strong website should help visitors move from introduction, to analysis, to explanation in a way that feels clear, purposeful, and professional.

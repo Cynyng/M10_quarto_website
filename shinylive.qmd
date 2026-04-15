@@ -1,0 +1,62 @@
+---
+title: "Essay on Shinylive"
+format: html
+---
+
+# Essay on Shinylive
+
+## Prompt
+
+In Step 3 of the Module, W10 - Communicating with Dashboards (Static Dashboard + Shiny App), you learned about serverless Shiny Apps with Shinylive. What is Shinylive? Assume that you are also explaining it to your coworkers. How does it differ from the traditional Shiny app introduced in Step 2? What are the pros and cons of Shinylive in comparison with Shiny Apps? These lecture notes will become your "Essay on Shiny Live" part of the website.
+
+## Response
+
+Shinylive is a way to share certain Shiny applications without relying on a traditional Shiny server. Instead of requiring a full server environment to run the app in the background, Shinylive is designed to let the app run in a lighter, browser-based way that works well for teaching examples, portfolios, and small interactive demonstrations.
+
+To explain this to coworkers, I would describe traditional Shiny as the standard approach for building interactive R apps that depend on a server process. In that model, the user interacts with the page, the server processes the request, and the updated result is returned to the browser. Shinylive changes that model by making it possible to deliver interactive examples in a more portable format, which is especially useful for static websites and educational content.
+
+## How Shinylive Differs from Traditional Shiny
+
+### Traditional Shiny
+
+- Usually depends on a server environment
+- Commonly deployed through platforms such as shinyapps.io or other Shiny hosting tools
+- Better suited for heavier computation and more advanced backend needs
+- Often a stronger choice for internal business tools and more complex production apps
+
+### Shinylive
+
+- Works well for lightweight interactive examples
+- Fits naturally into static websites and portfolio pages
+- Reduces the need for dedicated server infrastructure
+- Is especially useful for classroom demonstrations, tutorials, and simple public-facing apps
+
+## Advantages of Shinylive
+
+Shinylive offers several important benefits:
+
+- Easier to include in a static website
+- Good for instructional content and demonstrations
+- More portable for portfolio use
+- Simpler to share when the app is relatively lightweight
+
+## Disadvantages of Shinylive
+
+At the same time, Shinylive has trade-offs:
+
+- It may not support every feature used in traditional Shiny apps
+- It is less suitable for heavy server-side processing
+- Complex apps may still require a traditional Shiny deployment
+- Browser-based performance may be more limited for larger workflows
+
+## When to Use Each One
+
+If the goal is to build a full internal tool with heavier data processing, secure access, or more advanced backend logic, traditional Shiny is usually the better option. If the goal is to create a teaching example, portfolio demonstration, or lightweight interactive app that can live inside a static website, Shinylive can be the better fit.
+
+## Comparison Summary
+
+The main difference is that traditional Shiny emphasizes full app hosting with backend support, while Shinylive emphasizes portability and lighter deployment. Traditional Shiny gives more power and flexibility, but Shinylive makes it easier to publish interactive work as part of a web page without maintaining a full app server.
+
+## Conclusion
+
+Shinylive expands the ways Shiny-style interactivity can be shared on the web. Compared with traditional Shiny, it is more lightweight and easier to integrate into a website, especially for educational and portfolio purposes. However, traditional Shiny remains the stronger choice when the application needs full server support, more complex logic, or enterprise-style deployment.
